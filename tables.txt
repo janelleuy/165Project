@@ -1,0 +1,83 @@
+CREATE TABLE LOGIN(
+username INT NOT NULL,
+password VARCHAR(20) NOT NULL,
+PRIMARY KEY(username, password)
+);
+
+CREATE TABLE STUDENT(
+student_number INT NOT NULL,
+first_name VARCHAR(30) NOT NULL,
+middle_name VARCHAR(30),
+last_name VARCHAR(30) NOT NULL,
+PRIMARY KEY (student_number),
+FOREIGN KEY (student_number) REFERENCES LOGIN(username)
+);
+
+CREATE TABLE TEACHER(
+ssn INT NOT NULL,
+first_name VARCHAR(30) NOT NULL,
+last_name VARCHAR(30) NOT NULL,
+position VARCHAR(20) NOT NULL,
+Primary key (ssn),
+FOREIGN KEY (ssn) REFERENCES LOGIN(username)
+);
+
+CREATE TABLE SALARY(
+ssn INT NOT NULL,
+year INT NOT NULL,
+type_of_salary VARCHAR(20) NOT NULL,
+salary_amount REAL NOT NULL,
+Primary key (ssn, year),
+FOREIGN KEY (ssn) REFERENCES TEACHER(ssn),
+FOREIGN KEY (year) REFERENCES ENROLLED(school_year)
+);
+
+CREATE TABLE GRADE(
+student_number INT NOT NULL,
+school_year INT NOT NULL,
+subject VARCHAR(20) NOT NULL,
+q1_grade REAL,
+q2_grade REAL,
+q3_grade REAL,
+q4_grade REAL,
+final_grade REAL,
+PRIMARY KEY (student number, school year),
+FOREIGN KEY (student_number) REFERENCES STUDENT(student_number),
+FOREIGN KEY (school_year) REFERENCES ENROLLED(school_year),
+FOREIGN KEY (subject) REFERENCES SUBJECT(subject)
+);
+
+CREATE TABLE SUBJECT(
+subject VARCHAR(20) NOT NULL,
+start_time TIME NOT NULL,
+end_time TIME NOT NULL,
+year INT NOT NULL,
+section INT NOT NULL,
+room_number INT NOT NULL,
+school_year INT NOT NULL,
+ssn INT NOT NULL,
+PRIMARY KEY (subject, year, section, school_year),
+FOREIGN KEY (year) REFERENCES ENROLLED(year),
+FOREIGN KEY (section) REFERENCES ENROLLED(section),
+FOREIGN KEY (school_year) REFERENCES ENROLLED(school_year),
+FOREIGN KEY (ssn) REFERENCES TEACHER(ssn)
+);
+
+CREATE TABLE ENROLLED(
+school_year INT NOT NULL,
+year INT NOT NULL,
+section INT NOT NULL,
+student_number INT NOT NULL,
+PRIMARY KEY (school_year, student_number),
+FOREIGN KEY (student_number) REFERENCES STUDENT(student_number)
+);
+
+CREATE TABLE PAYMENT_DETAILS(
+student_number INT NOT NULL,
+school_year INT NOT NULL,
+remaining_balance REAL,
+tuition_fee REAL NOT NULL,
+PRIMARY KEY (student_number, school_year), 
+FOREIGN KEY (student_number) REFERENCES STUDENT(student_number),
+FOREIGN KEY (school_year) REFERENCES ENROLLED(school_year)
+);
